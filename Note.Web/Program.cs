@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Note.BusinessLayer.BusinessRegistration;
 using Note.DataAccessLayer.Concrete;
 using Note.DataAccessLayer.DALRegistration;
+using Note.Web.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDalRegistration();
 builder.Services.AddDbContext<Context>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon")));
+
+builder.Services.AddBusinessRegistration();
+builder.Services.AddAutoMapper(typeof(MapProfile));
 
 var app = builder.Build();
 

@@ -1,32 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Note.BusinessLayer.Abstract;
 using Note.Web.Models;
+using Note.Web.ViewModels;
 using System.Diagnostics;
 
 namespace Note.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IAppNoteService _appNoteService;
+        private readonly IMapper _mapper; 
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IAppNoteService appNoteService, IMapper mapper)
         {
-            _logger = logger;
+            _appNoteService = appNoteService;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var values=_appNoteService.TGetAll().ToList();
+            return View(_mapper.Map<List<AppNoteListVM>>(values));
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        
     }
 }

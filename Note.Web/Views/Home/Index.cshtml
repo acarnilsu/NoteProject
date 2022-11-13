@@ -1,8 +1,25 @@
-﻿@{
+﻿@model List<AppNoteListVM>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    @foreach (var item in Model)
+    {
+        <table class="table table-bordered">
+            <tr>
+                <th>ID</th>
+                <th>Başlık</th>
+                <th>İçerik</th>
+                <th>Oluşturulma Tarihi</th>
+            </tr>
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.Title</td>
+                <td>@item.Content</td>
+                <td>@item.CreatedDate.ToShortDateString()</td>
+                <td><a asp-controller="home" asp-action="details" asp-route-id="@item.ID" class="btn btn-primary btn-sm">Detaylar</a></td>
+            </tr>
+        </table>
+    }
 </div>
