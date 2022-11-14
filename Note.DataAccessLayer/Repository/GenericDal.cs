@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Note.DataAccessLayer.Repository
 {
-    public class GenericRepository<T> : IGenericDal<T> where T : class
+    public class GenericDal<T> : IGenericDal<T> where T : class
     {
         protected readonly Context _context;
         protected readonly DbSet<T> _dbSet;
 
-        public GenericRepository(Context context)
+        public GenericDal(Context context)
         {
             _context = context;
             _dbSet = _context.Set<T>();

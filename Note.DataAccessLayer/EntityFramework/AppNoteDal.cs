@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Note.DataAccessLayer.EntityFramework
 {
-    public class EfAppNoteDal : GenericRepository<AppNote>, IAppNoteDal
+    public class AppNoteDal : GenericDal<AppNote>, IAppNoteDal
     {
-        public EfAppNoteDal(Context context) : base(context)
+        public AppNoteDal(Context context) : base(context)
         {
         }
     }

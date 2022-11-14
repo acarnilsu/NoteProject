@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Note.BusinessLayer.Concrete
 {
-    public class AppNoteManager : GenericManager<AppNote>, IAppNoteService
+    public class AppNoteService : GenericService<AppNote>, IAppNoteService
     {
-        public AppNoteManager(IGenericDal<AppNote> genericDal, IUnitOfWork unitOfWork) : base(genericDal, unitOfWork)
+        public AppNoteService(IGenericDal<AppNote> genericDal, IUnitOfWork unitOfWork) : base(genericDal, unitOfWork)
         {
         }
     }

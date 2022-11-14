@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Note.BusinessLayer.Concrete
 {
-    public class GenericManager<T> : IGenericService<T> where T : class
+    public class GenericService<T> : IGenericService<T> where T : class
     {
         protected readonly IGenericDal<T> _genericDal;
         protected readonly IUnitOfWork _unitOfWork;
 
-        public GenericManager(IGenericDal<T> genericDal, IUnitOfWork unitOfWork)
+        public GenericService(IGenericDal<T> genericDal, IUnitOfWork unitOfWork)
         {
             _genericDal = genericDal;
             _unitOfWork = unitOfWork;
