@@ -32,7 +32,7 @@ namespace Note.Web.Areas.Manager.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AppNote appNote)
         {
-            appNote.ID = Guid.NewGuid().ToString();
+            appNote.ID = Guid.NewGuid().ToString();   //guid=uniqe bir değer atıyor.
             appNote.CreatedDate= DateTime.Now;
             appNote.ModifiedDate= DateTime.Now;
             await _appNoteService.TAddAsync(appNote);

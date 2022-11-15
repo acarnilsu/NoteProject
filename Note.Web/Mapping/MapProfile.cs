@@ -10,6 +10,9 @@ namespace Note.Web.Mapping
         {
             CreateMap<AppNote, AppNoteListVM>();
             CreateMap<AppNoteListVM, AppNote>();
+
+            CreateMap<SignInVM, AppUser>();
+            CreateMap<AppUser, SignInVM>();
         }
     }
 }
