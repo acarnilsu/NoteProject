@@ -29,7 +29,8 @@ namespace Note.Web.Controllers
             {
                 AppUser user = new()
                 {
-                    Email = signInVM.Email
+                    Email = signInVM.Email,
+                    UserName=signInVM.UserName
 
                 };
                 var result = await _userManager.CreateAsync(user, signInVM.Password);

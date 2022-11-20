@@ -4,15 +4,16 @@
 }
 
 <div class="container">
-    @foreach (var item in Model)
-    {
-        <table class="table table-bordered">
-            <tr>
-                <th>ID</th>
-                <th>Başlık</th>
-                <th>İçerik</th>
-                <th>Oluşturulma Tarihi</th>
-            </tr>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Başlık</th>
+            <th>İçerik</th>
+            <th>Oluşturulma Tarihi</th>
+        </tr>
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>@item.ID</td>
                 <td>@item.Title</td>
@@ -20,6 +21,7 @@
                 <td>@item.CreatedDate.ToShortDateString()</td>
                 <td><a asp-controller="home" asp-action="details" asp-route-id="@item.ID" class="btn btn-primary btn-sm">Detaylar</a></td>
             </tr>
-        </table>
-    }
+        }
+    </table>
+
 </div>

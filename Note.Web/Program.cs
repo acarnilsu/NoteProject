@@ -1,7 +1,10 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Note.BusinessLayer.BusinessRegistration;
 using Note.DataAccessLayer.Concrete;
+using Note.EntityLayer.Concrete;
 using Note.Web.Mapping;
 using Note.Web.Moduls;
 
@@ -12,9 +15,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<Context>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon")));
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
-
+builder.Services.AddBusinessRegistration();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new ServiceDalModul()));
+
 
 
 var app = builder.Build();
