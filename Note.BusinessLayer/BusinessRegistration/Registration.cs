@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Note.DataAccessLayer.Concrete;
 using Note.BusinessLayer.IdentityCustomValidator;
+using Microsoft.Extensions.Options;
 
 namespace Note.BusinessLayer.BusinessRegistration
 {
@@ -44,6 +45,11 @@ namespace Note.BusinessLayer.BusinessRegistration
                 .AddEntityFrameworkStores<Context>()
                 .AddDefaultTokenProviders();
 
+
+
+
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+        options.TokenLifespan = TimeSpan.FromMinutes(1));
         }
 
     }

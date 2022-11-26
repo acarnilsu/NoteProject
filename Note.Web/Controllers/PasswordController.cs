@@ -48,5 +48,74 @@ namespace Note.Web.Controllers
 
             return View(forgotPasswordVM);
         }
+
+
+
+        [HttpGet]
+        public IActionResult ResetPasswordConfirm(string userId, string token)
+        {
+            TempData["userId"] = userId;
+            TempData["token"] = token;
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPasswordConfirm(NewPasswordVM viewModel)
+        {
+
+            if (viewModel.UserId == null)
+            {
+                viewModel.UserId = TempData["userId"].ToString();
+                viewModel.Token = TempData["token"].ToString();
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                AppUser user = await _userManager.FindByIdAsync(viewModel.UserId);
+
+                if (user != null)
+                {
+
+                    var result = await _userManager.ResetPasswordAsync(user, viewModel.Token, viewModel.Password);
+
+                    if (result.Succeeded)
+                    {
+                        await _userManager.UpdateSecurityStampAsync(user);
+
+                        TempData["PasswordResetInfo"] = "Şifreniz başarı bir şekilde yenilenmiştir.";
+
+                        await _signInManager.SignOutAsync();
+
+                        return RedirectToAction("LogIn", "LogIn");
+
+                    }
+                    else
+                    {
+                        foreach (var item in result.Errors)
+                        {
+                            ModelState.AddModelError(item.Code, item.Description);
+                        }
+                    }
+                }
+
+                else
+                {
+
+                    ModelState.AddModelError("", "Hata meydana geldi. Tekrar deneyiniz");
+
+
+                    return View(viewModel);
+                }
+
+            }
+
+            return View(viewModel);
+        }
+
+        
+
     }
 }
