@@ -1,0 +1,98 @@
+﻿@model List<CreateRoleVM>
+
+@{
+    ViewData["Title"] = "Rol Listeleme";
+    Layout = "~/Areas/Manager/Views/Shared/_Layout.cshtml";
+    int count = 0;
+}
+
+
+<h1>Roller</h1>
+<hr />
+<a asp-action="CreateRoles" asp-area="Manager" asp-controller="Admin" class="btn btn-primary">Role Oluştur </a>
+
+
+
+
+
+<table class="table table-bordered table-striped mt-3">
+    <tr>
+        <td>#</td>
+        <td>Rol İsmi</td>
+        <td>İşlemler</td>
+
+        @if (Model.Count() == 0)
+        {
+        <tr>
+            <td colspan="3">Hiç bir üye yoktur</td>
+        </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+
+            <tr>
+                <td class=" text-center">
+                        @{
+                            count++;
+                        }
+                        @count
+                </td>
+                <td>@item.Name</td>
+                <td>
+                    <div class="row">
+                        <div class="col-lg-6 text-center">
+
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal-@count">
+                                Sil
+                            </button>
+                        </div>
+
+                        <!-- The Modal -->
+                <div class="modal" id="myModal-@count">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                            <div class="modal-header">
+                                        <h4 class="modal-title">@item.Name</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                            <div class="modal-body">
+                                        <strong>@item.Name</strong>  rolünü silmek istediğinizden emin misiniz?
+                                    </div>
+
+                                    <!-- Modal footer -->
+                            <div class="modal-footer">
+                                        <form asp-action="RoleDelete" asp-controller="Admin" asp-route-id="@item.Id" asp-area="Manager" method="post">
+                                            <button type="submit" class="btn btn-danger">Sil</button>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-lg-6 text-center">
+                            <form asp-action="RoleUpdate" asp-controller="Admin" asp-route-id="@item.Id" asp-area="Manager" method="get">
+                                <button type="submit" class="btn btn-success">Güncelle</button>
+                            </form>
+                        </div>
+                    </div>
+
+
+
+                </td>
+
+
+            </tr>
+            }
+        }
+</table>
+

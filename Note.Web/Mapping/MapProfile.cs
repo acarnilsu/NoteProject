@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Note.EntityLayer.Concrete;
+using Note.Web.Areas.Manager.ViewModels;
 using Note.Web.ViewModels;
 
 namespace Note.Web.Mapping
@@ -13,6 +14,9 @@ namespace Note.Web.Mapping
 
             CreateMap<SignInVM, AppUser>();
             CreateMap<AppUser, SignInVM>();
+
+            CreateMap<AppRole, CreateRoleVM>();
+            CreateMap<CreateRoleVM, AppRole>();
         }
     }
 }
