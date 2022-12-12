@@ -17,6 +17,9 @@ namespace Note.Web.Mapping
 
             CreateMap<AppRole, CreateRoleVM>();
             CreateMap<CreateRoleVM, AppRole>();
+
+            CreateMap<AppUser, AdminUserListVM>().ReverseMap();
+
         }
     }
 }

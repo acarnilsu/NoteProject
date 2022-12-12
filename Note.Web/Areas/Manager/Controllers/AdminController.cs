@@ -41,33 +41,33 @@ namespace Note.Web.Areas.Manager.Controllers
             AppRole appRole = new();
 
             //if (ModelState.IsValid)
-            
-                appRole.Name= createRoleVM.Name;
 
-                var result=await _roleManager.CreateAsync(appRole);
+            appRole.Name = createRoleVM.Name;
 
-                if (result.Succeeded)
+            var result = await _roleManager.CreateAsync(appRole);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Roles");
+            }
+            else
+            {
+                foreach (var item in result.Errors)
                 {
-                    return RedirectToAction("Roles");
+                    ModelState.AddModelError(item.Code, item.Description);
                 }
-                else
-                {
-                    foreach (var item in result.Errors)
-                    {
-                        ModelState.AddModelError(item.Code, item.Description);
-                    }
-                }
-            
+            }
+
             return View(createRoleVM);
         }
 
         [HttpPost]
         public async Task<IActionResult> RoleDelete(string id)
         {
-            AppRole appRole=await _roleManager.FindByIdAsync(id);
+            AppRole appRole = await _roleManager.FindByIdAsync(id);
             if (appRole != null)
             {
-                var result=await _roleManager.DeleteAsync(appRole);
+                var result = await _roleManager.DeleteAsync(appRole);
 
             }
             return RedirectToAction("Roles");
@@ -78,7 +78,7 @@ namespace Note.Web.Areas.Manager.Controllers
         public async Task<IActionResult> RoleUpdate(string id)
         {
             AppRole appRole = await _roleManager.FindByIdAsync(id);
-            if(appRole != null)
+            if (appRole != null)
             {
                 return View(_mapper.Map<CreateRoleVM>(appRole));
             }
@@ -92,14 +92,14 @@ namespace Note.Web.Areas.Manager.Controllers
             if (appRole != null)
             {
                 appRole.Name = createRoleVM.Name;
-                var result=await _roleManager.UpdateAsync(appRole);
+                var result = await _roleManager.UpdateAsync(appRole);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Roles");
                 }
                 else
                 {
-                    foreach(var item in result.Errors)
+                    foreach (var item in result.Errors)
                     {
                         ModelState.AddModelError(item.Code, item.Description);
                     }
@@ -113,5 +113,74 @@ namespace Note.Web.Areas.Manager.Controllers
 
 
         }
+
+
+        public async Task<IActionResult> Users()
+        {
+
+            var user = await _userManager.Users.ToListAsync();
+
+            return View(_mapper.Map<List<AdminUserListVM>>(user));
+        }
+
+
+
+        [HttpGet]
+        public IActionResult RoleAssign(string id)
+        {
+            TempData["userId"] = id;
+
+            AppUser user = _userManager.FindByIdAsync(id).Result;
+
+            ViewBag.userName = user.UserName;
+
+            IQueryable<AppRole> roles = _roleManager.Roles;
+
+            List<string> userRoles = (List<string>)_userManager.GetRolesAsync(user).Result;
+
+            List<RoleAssignVM> viewModel = new();
+
+            foreach (var role in roles)
+            {
+                RoleAssignVM roleAssignVM = new();
+                roleAssignVM.Id = role.Id;
+                roleAssignVM.Name = role.Name;
+
+                if (userRoles.Contains(role.Name))
+                    roleAssignVM.Exist = true;
+
+                else
+                    roleAssignVM.Exist = false;
+
+                viewModel.Add(roleAssignVM);
+
+            }
+
+            return View(viewModel);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> RoleAssign(List<RoleAssignVM> roleAssignVM)
+        {
+            AppUser user = await _userManager.FindByIdAsync(TempData["userId"].ToString());
+
+            foreach (var item in roleAssignVM)
+            {
+                if (item.Exist)
+
+                {
+                    await _userManager.AddToRoleAsync(user, item.Name);
+                }
+                else
+                {
+                    await _userManager.RemoveFromRoleAsync(user, item.Name);
+                }
+            }
+
+            return RedirectToAction("Users");
+        }
+
     }
 }

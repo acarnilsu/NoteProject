@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Note.EntityLayer.Concrete;
+using Note.Web.Helper;
 using Note.Web.ViewModels;
 
 namespace Note.Web.Controllers
@@ -34,9 +35,24 @@ namespace Note.Web.Controllers
 
                 };
                 var result = await _userManager.CreateAsync(user, signInVM.Password);
+
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("LogIn");
+                    string ConfirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user); //usera göre bir token veriyor
+
+                    string link = Url.Action("ConfirmEmail", "SignIn", new  //1.method adı, 2.controller adı, 3. linkin devamı
+                    {
+                        userId = user.Id, //yukarıda oluşturduğum userin idsi
+                        token = ConfirmToken,
+
+                    }, protocol: HttpContext.Request.Scheme
+                    );
+
+                    EmailConfirmation.EmailConfirmSendEmail(link, signInVM.Email, signInVM.UserName);
+
+
+
+                    return RedirectToAction("SendEmail");
                 }
                 else
                 {
@@ -49,5 +65,32 @@ namespace Note.Web.Controllers
             }
             return View(signInVM);
         }
+
+
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                ViewBag.Status = "E-posta adresiniz onaylanmıştır";
+            }
+            else
+            {
+                ViewBag.Status = "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz";
+            }
+
+            return View();
+
+        }
+
+
+        public IActionResult SendEmail()
+        {
+            return View();
+        }
+
     }
 }

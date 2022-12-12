@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "E-posta Doğrulama";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ConfirmEmail</title>
+</head>
+<body>
+
+        <div class="row">
+        <div class="col-lg-8 offset-2 text-center alert alert-success">
+            <h1> @ViewBag.Status</h1>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+
+        <div class="col-lg-8 offset-2 text-center ">
+            <h3> <a asp-controller="LogIn" asp-action="LogIn" class="btn btn-primary">Giriş Yap </a></h3>
+        </div>
+    </div>
+
+</body>
+</html>
